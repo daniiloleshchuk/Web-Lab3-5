@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="{% url 'index' %}">My Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create' %}">Create product</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" id="search-form">
+            <input class="form-control mr-sm-2" id="search-bar" type="search" placeholder="Type something..." aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="search-btn">Search</button>
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="reset" id="reset-btn">Clear</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+<script>
+
+        const checkbox = document.getElementById('checkbox')
+
+        var list = document.getElementById('products-list');
+
+        var nodesToSort  = list.querySelectorAll('.product');
+
+        var totalPrice = document.getElementById('total-products-price');
+
+        var countBtn = document.getElementById('count-btn')
+
+        var searchForm = document.getElementById('search-form')
+
+        var resetBtn = document.getElementById('reset-btn')
+
+
+        checkbox.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                sortUsingNestedText($('#products-list'), "div", "span.product-price");
+            } else {
+                sortUsingNestedText($('#products-list'), "div", "span.product-price", true);
+            }
+        })
+
+        countBtn.addEventListener('click', () => {
+            var sum = 0;
+            prices = document.getElementsByClassName('product-price');
+            console.log(prices);
+            for (var i = 0; i < prices.length; i++) {
+                console.log(prices[i].innerHTML);
+                sum += parseFloat(prices[i].innerHTML);
+            }
+            console.log(sum);
+            totalPrice.innerHTML = sum
+
+        })
+
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            window.location.href=e.srcElement[0].value;
+        })
+
+        resetBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            window.location.href="/";
+        })
+
+        function sortUsingNestedText(parent, childSelector, keySelector, reverse=false) {
+            var items = parent.children(childSelector).sort(function(a, b) {
+                var vA = $(keySelector, a).text();
+                vA = parseFloat(vA)
+                var vB = $(keySelector, b).text();
+                vB = parseFloat(vB)
+                return comparator(vA, vB, reverse)
+            });
+            parent.append(items);
+        }
+
+        function comparator(v1, v2, reverse) {
+            if (reverse) {
+                return (v1 > v2) ? -1 : (v1 < v2) ? 1 : 0;
+            }
+            else if (!reverse) {
+                return (v1 < v2) ? -1 : (v1 > v2) ? 1 : 0;
+            }
+        }
+
+
+
+
+    </script>
+
+</body>
+</html>

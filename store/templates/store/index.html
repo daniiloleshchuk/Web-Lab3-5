@@ -1,0 +1,90 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<section>
+<div class="row">
+    <div class="col-md-4">
+         <div class="row justify-content-center">
+             <div class="col-10 manage-block">
+                 <div class="row justify-content-center">
+                    <span>Manage Products</span>
+                 </div>
+                 <div class="row justify-content-between align-items-center">
+                     <div class="row no-gutters align-items-center">
+                         <span>
+                             Sort products by price ASC
+                         </span>
+                     </div>
+                     <div class="row no-gutters">
+                         <label class="switch">
+                            <input type="checkbox" id="checkbox">
+                            <span class="slider round"></span>
+                         </label>
+                     </div>
+                 </div>
+                 <hr>
+                 <div class="row justify-content-between align-items-center">
+
+                         <div class="row no-gutters justify-content-center align-items-center">
+                             <span>Count total price of all products</span>
+                         </div>
+
+                         <div class="row no-gutters justify-content-center">
+                             <button class="btn btn-primary" id="count-btn">Count</button>
+                         </div>
+
+                 </div>
+                 <div class="row justify-content-center">
+                     <span>Total: </span>
+                     <span id="total-products-price"> 0</span>
+                     <span>UAH</span>
+                 </div>
+             </div>
+
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-8">
+        <div class="right__block">
+        <div class="container">
+            <div class="row" id="products-list">
+
+                {% for product in products %}
+
+                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 product" id="product">
+                        <div class="card">
+                            <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                <span class="product-price">{{ product.price }}</span>
+                            </div>
+                            <div class=" row no-gutters justify-content-around">
+                                <div class="col-6">
+                                    <div class="row no-gutters justify-content-center">
+                                        <button type="button" class="btn btn-outline-primary card-btn" onclick="location.href='{% url 'edit' id=product.id %}'">Edit</button>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row no-gutters justify-content-center">
+                                        <button type="button" class="btn btn-outline-danger card-btn" onclick="location.href='{% url 'delete' id=product.id %}'">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+</section>
+
+
+
+
+{% endblock %}
